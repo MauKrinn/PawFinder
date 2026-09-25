@@ -3,11 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAW FINDER</title>
-    <link rel="stylesheet" href="css/estilos.css">
+    <title>Código Pescar — Pagina Web</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Karla:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
+  
+<!-- HEADER -> Se podria agregar un search--> 
+<header class="topbar">
+  <div class="logo"> <!-- todavia falta agregar una imagen para el logo o solo puede quedar asi  -->
+    <div>
+      Paw Finder
+      <small>Refugios &amp; </small>  <!-- Falta agregar una palabra más -->
+    </div>
+  </div>
+  <nav class="nav-actions" aria-label="Navegación principal">
+    <a class="btn btn-ghost" href="#" data-nav="publicaciones">Nosotros</a>
+    <a class="btn btn-ghost" href="#publicaciones" data-nav="publicaciones"> + Publicaciones</a>
+    <a class="btn btn-solid" href="#login" data-nav="login">Log-in</a>
+  </nav>
+
+</header>
+
+<!-- BANNER -->  <!-- Falta insertar una imagen o pueden ser 3 imagenes en modo carrusel -->
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">Ficha 000 ·</span>
+    <h1>Cada expediente es una historia esperando un final de casa.</h1>
+    <p>Explorá, conocé a cada perro y gato en adopción, y publicá un nuevo caso en segundos.</p>
+  </div>
+</section>
+
+<div class="layout">
+
+  <!-- SIDE A -->
+  <aside class="panel sideA">
+    <div class="panel-title">· Filtros · </div>
+
+    <div class="filter-group">
+      <h3>Especie</h3>
+      <div class="chip-row">
+        <button class="chip active">Todos</button>
+        <button class="chip">Perros</button>
+        <button class="chip">Gatos</button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <h3>Tamaño</h3>
+      <div class="chip-row">
+        <button class="chip">Pequeño</button>
+        <button class="chip">Mediano</button>
+        <button class="chip">Grande</button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <h3>Edad</h3>
+      <div class="chip-row">
+        <button class="chip">Cachorro</button>
+        <button class="chip">Adulto</button>
+        <button class="chip">??</button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <h3>Estado</h3>
+      <div class="chip-row">
+        <button class="chip active">En adopción</button>
+        <button class="chip">Adoptado</button>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- MAIN PRINCIPAL CATALOGO ->> Se podria modificar el tamaño de las tarjetas para que sea más grandes y asi agregar los botones de adoptar y o mas información-->
+  <main class="catalog-wrap" id="catalogWrap">
+    <div class="catalog-top">
+      <h2>Catálogo de adopción</h2>
+      <span class="catalog-count mono" id="catalogCount">12</span>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <!-- SIDE B -->
+  <aside class="panel sideB">
+    <div class="panel-title">· Destacado ·</div>
+
+    <div class="feature-card">
+      <img src="https://placedog.net/440/300?id=15" alt="Perro destacado del refugio">
+      <div class="feature-body">
+        <span class="feature-tag">Ficha 003 · Destacado</span>
+        <h3>Rumba</h3>
+        <p>Mestiza, 2 años. Convive bien con gatos y le encanta dormir al sol. Esterilizada y vacunada.</p>
+      </div>
+    </div>
+
+    <div class="panel-title">Este mes</div>
+    <ul class="stats-list">
+      <li>Expedientes activos <span class="num">56</span></li>
+      <li>Adopciones logradas <span class="num">9</span></li>
+      <li>Ingresos nuevos <span class="num">14</span></li>
+      <li>Publicados por vos <span class="num">1</span></li>
+      <li>Urgente<span class="num">3</span></li>
+    </ul>
+  </aside>
+</div>
+
+<script src="script.js"></script>
     
 </body>
 </html>
