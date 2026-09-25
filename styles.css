@@ -1,0 +1,13 @@
+/* Con la propiedad root se puede crear variables con los colores que una ya eligio y asi ahorrarse en escribir de manera hexadecimal */
+:root{
+    --paper:#F1E9D8;
+    --paper-deep:#E7DBC1;
+    --ink-green:#2F3B2A;
+    --moss:#75824B;
+    --moss-deep:#5C6A3C;
+    --rust:#B5562E;
+    --coffee:#3A2A1E;
+    --card-border:#D8CCA8;
+    --card-bg:#FBF7EE;
+    --cream-shadow: rgba(58,42,30,0.14);
+  }
