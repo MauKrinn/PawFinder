@@ -414,3 +414,71 @@
     .btn{padding:8px 12px; font-size:0.78rem;}
     .hero-copy{padding:20px 16px;}
   }
+
+  /* ---------- Footer ---------- */
+.footer {
+  margin-top: 50px;
+  padding: 45px 6% 20px;
+  background: #1f2933;
+  color: white;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 40px;
+}
+
+.footer h3 {
+  margin: 0 0 12px;
+  color:var(--moss);
+  font-family: "Fraunces", serif;
+  font-size: 28px;
+}
+
+.footer h4 {
+  margin: 0 0 15px;
+  font-family: "Karla", sans-serif;
+  font-size: 16px;
+}
+
+.footer p {
+  margin: 8px 0;
+  color: #d9dee3;
+  line-height: 1.6;
+}
+
+.footer-brand p {
+  max-width: 320px;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-links a {
+  margin-bottom: 9px;
+  color: #d9dee3;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #d6a85f;
+}
+
+.footer-contact p {
+  font-size: 14px;
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 35px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
