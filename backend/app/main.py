@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.core.config import settings
-from backend.api.routes import auth
+from backend.api.routes import auth, pets
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -17,8 +17,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# REGISTRAMOS LAS RUTAS
+# Registramos las rutas
 app.include_router(auth.router)
+app.include_router(pets.router)
 
 @app.get("/")
 def read_root():

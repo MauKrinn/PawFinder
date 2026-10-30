@@ -69,3 +69,101 @@ const animals = [
   grid.appendChild(addCard);
 
   document.getElementById('catalogCount').textContent = animals.length + ' expedientes'; */
+
+
+
+  // Navegación: links "Nosotros", "Publicaciones" y "Login"
+  // Agregado en los cambios hechos por Mauro para reemplazar los datos estáticos por una llamada a la API
+(function () {
+    const navLinks = document.querySelectorAll('.nav-actions > a[data-nav]');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = this.dataset.nav;
+            
+            if (target === 'publicaciones') {
+                const catalogo = document.getElementById('catalogWrap');
+                if (catalogo) catalogo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            if (target === 'login') {
+                alert('Próximamente: Flujo de inicio de sesión con Supabase Auth.');
+            }
+        });
+    });
+})();
+
+// Elementos del DOM
+const grid = document.getElementById('grid');
+const countSpan = document.getElementById('catalogCount');
+
+// Función principal para obtener datos de FastAPI
+async function fetchMascotas() {
+    try {
+        // Hacemos la llamada al backend local
+        const response = await fetch('http://localhost:8000/pets/');
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+        
+        const data = await response.json();
+        renderCatalog(data);
+    } catch (error) {
+        console.error("Error cargando mascotas:", error);
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--rust);">No se pudo conectar con el servidor API. Verifica que FastAPI esté corriendo.</p>';
+    }
+}
+
+// Generador de HTML para cada tarjeta
+function cardHTML(a) {
+    // Mapeamos los datos de la DB al frontend
+    const estado = (a.estado_publicacion || 'disponible').toLowerCase();
+    const textoEstado = estado === 'adoptada' ? 'Adoptado' : 'En adopción';
+    // Usaremos un placeholder hasta integrar Supabase Storage en la Fase 5
+    const imgUrl = a.especie === 'PERRO' 
+        ? `https://placedog.net/380/300?random=${a.id}` 
+        : `https://cataas.com/cat?width=380&height=300&type=square&random=${a.id}`;
+    
+    // El id es un UUID muy largo, mostraremos solo los primeros 6 caracteres en la UI
+    const idCorto = a.id.substring(0, 6).toUpperCase();
+
+    return `
+    <article class="card" tabindex="0" aria-label="${a.nombre}, ${a.especie}, ${a.edad}">
+        <div class="card-photo">
+            <img src="${imgUrl}" alt="${a.nombre} en adopción" loading="lazy">
+            <span class="stamp ${estado}">${textoEstado}</span>
+        </div>
+        <div class="card-body">
+            <div class="card-id mono">N.º ${idCorto}</div>
+            <div class="card-name">${a.nombre}</div>
+            <div class="card-meta">
+                <span>${a.especie}</span><span class="dot">·</span>
+                <span>${a.edad}</span><span class="dot">·</span>
+                <span>${a.tamano}</span>
+            </div>
+        </div>
+    </article>`;
+}
+
+// Renderizado del catálogo
+function renderCatalog(mascotas) {
+    if (mascotas.length === 0) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; margin-top: 20px;">No hay mascotas publicadas por el momento.</p>';
+        countSpan.textContent = '0 expedientes';
+    } else {
+        grid.innerHTML = mascotas.map(cardHTML).join('');
+        countSpan.textContent = mascotas.length + ' expedientes';
+    }
+
+    // Volvemos a inyectar el botón de publicar al final
+    const addCard = document.createElement('button');
+    addCard.className = 'card card-add';
+    addCard.setAttribute('aria-label', 'Publicar un nuevo expediente de adopción');
+    addCard.innerHTML = `<span class="plus">+</span><span class="label">Publicar</span>`;
+    addCard.addEventListener('click', () => {
+        alert('Abrir formulario para publicar un nuevo perro o gato en adopción (Fase 5).');
+    });
+    
+    grid.appendChild(addCard);
+}
+
+// Inicializar la carga al abrir la página
+fetchMascotas();
