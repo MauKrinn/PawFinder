@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, Query, Form, UploadFile, File, HTTPException
+from fastapi import APIRouter, Depends, Query, Form, UploadFile, File, HTTPException, status
 from sqlmodel import Session, select
 from typing import List, Optional
+from pydantic import BaseModel
 import uuid
 
 from backend.core.database import get_session
@@ -102,3 +103,58 @@ async def create_pet(
     session.refresh(nueva_mascota)
     
     return nueva_mascota
+
+# Esquema para recibir solo el campo de estado
+class MascotaUpdate(BaseModel):
+    estado_publicacion: str
+
+@router.patch("/{pet_id}", response_model=Mascota)
+def update_pet_status(
+    pet_id: uuid.UUID,
+    pet_update: MascotaUpdate,
+    current_user: Usuario = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """Actualiza el estado de una mascota (Ej: de ACTIVA a ADOPTADA). Solo el creador puede hacerlo."""
+    mascota = session.get(Mascota, pet_id)
+    
+    if not mascota:
+        raise HTTPException(status_code=404, detail="Mascota no encontrada")
+        
+    # Validamos que quien intenta modificar sea el dueño de la publicación
+    if mascota.usuario_creador_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, 
+            detail="No tienes permiso para modificar esta mascota"
+        )
+        
+    mascota.estado_publicacion = pet_update.estado_publicacion.upper()
+    session.add(mascota)
+    session.commit()
+    session.refresh(mascota)
+    
+    return mascota
+
+
+@router.delete("/{pet_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_pet(
+    pet_id: uuid.UUID,
+    current_user: Usuario = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """Elimina físicamente un expediente del sistema. Solo el creador puede hacerlo."""
+    mascota = session.get(Mascota, pet_id)
+    
+    if not mascota:
+        raise HTTPException(status_code=404, detail="Mascota no encontrada")
+        
+    # Validamos que quien intenta eliminar sea el dueño de la publicación
+    if mascota.usuario_creador_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, 
+            detail="No tienes permiso para eliminar esta mascota"
+        )
+        
+    session.delete(mascota)
+    session.commit()
+    return
