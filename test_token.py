@@ -4,7 +4,7 @@ from backend.core.config import settings
 # Conectamos con Supabase usando tus credenciales del .env
 supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
 
-email = "rescatista@pawfinder.com"
+email = "pruebawhatsapp@pawfinder.com"
 password = "passwordSeguro123"
 
 try:

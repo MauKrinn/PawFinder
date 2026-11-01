@@ -3,7 +3,7 @@ from sqlmodel import Session, select
 from typing import List, Optional
 from pydantic import BaseModel
 import uuid
-
+from urllib.parse import quote
 from backend.core.database import get_session
 from backend.models.pet import Mascota
 from backend.models.user import Usuario
@@ -158,3 +158,41 @@ def delete_pet(
     session.delete(mascota)
     session.commit()
     return
+
+@router.get("/{pet_id}/contact")
+def get_pet_contact(
+    pet_id: uuid.UUID,
+    current_user: Usuario = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """
+    Devuelve la información de contacto (WhatsApp) del creador de la publicación.
+    Protegido: Solo usuarios registrados pueden acceder a esta información.
+    """
+    mascota = session.get(Mascota, pet_id)
+    
+    if not mascota:
+        raise HTTPException(status_code=404, detail="Mascota no encontrada")
+        
+    # Buscamos los datos del usuario creador en la base de datos
+    creador = session.get(Usuario, mascota.usuario_creador_id)
+    
+    if not creador:
+        raise HTTPException(status_code=404, detail="El creador de esta publicación ya no existe en el sistema")
+
+    # Limpiamos el número por si ingresaron espacios o el signo +
+    numero_wa = creador.whatsapp.replace("+", "").replace(" ", "")
+    
+    # Pre-armamos un mensaje amigable
+    mensaje = f"¡Hola {creador.nombre}! Vi a {mascota.nombre} en PawFinder y me interesa iniciar un proceso de adopción."
+    mensaje_codificado = quote(mensaje)
+    
+    # Generamos el enlace directo a la API de WhatsApp
+    whatsapp_url = f"https://wa.me/{numero_wa}?text={mensaje_codificado}"
+
+    return {
+        "nombre_mascota": mascota.nombre,
+        "creador_nombre": creador.nombre,
+        "whatsapp_numero": creador.whatsapp,
+        "whatsapp_enlace": whatsapp_url
+    }
